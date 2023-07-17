@@ -6,15 +6,15 @@ import io.gatling.core.Predef._
 import scala.concurrent.duration.DurationInt
 class CheckResponseBodyAndExtract extends Simulation {
 
-  val httpProtocol = http.baseUrl(2"https://catfact.ninja")
+  val httpProtocol = http.baseUrl("https://videogamedb.uk/api")
     .acceptHeader("application/json")
 
   val scn = scenario("Check response code")
 
-    .exec(http("Get one fact - 1")
-      .get("/fact")
+    .exec(http("Get first videogame")
+      .get("/videogame/1")
       .check(status.in(200, 210))
-      .check(jsonPath("$.fact").is("cat says meow")))
+      .check(jsonPath("$.name").is("Resident Evil 4")))
     .pause(2)
 
   setUp(
