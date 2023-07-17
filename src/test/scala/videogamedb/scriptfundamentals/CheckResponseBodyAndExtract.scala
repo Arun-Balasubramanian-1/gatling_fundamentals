@@ -17,6 +17,18 @@ class CheckResponseBodyAndExtract extends Simulation {
       .check(jsonPath("$.name").is("Resident Evil 4")))
     .pause(2)
 
+    .exec(http("Get list of videogame")
+      .get("/videogame")
+      .check(status.in(200, 210))
+      //Get ID of the second videogame in the list response
+      .check(jsonPath("$[1].id").saveAs("id")))
+    .pause(2)
+
+    .exec(http("Get first videogame")
+      .get("/videogame/#{id}")
+      .check(status.in(200, 210))
+      .check(jsonPath("$.name").is("Gran Turismo 3")))
+
   setUp(
     scn.inject(atOnceUsers(1))
       .protocols(httpProtocol)
